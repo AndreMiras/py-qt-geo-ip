@@ -1,0 +1,5 @@
+= Developer Documentation =
+
+== GUI designing ==
+The main_window_ui.ui is created with qtdesigner and the main_window_ui.py code is generated via:
+$ pyuic4 -x main_window_ui.ui -o main_window_ui.py
