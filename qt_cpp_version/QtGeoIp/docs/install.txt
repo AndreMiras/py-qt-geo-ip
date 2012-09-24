@@ -14,5 +14,13 @@ $ sudo apt-get install libqt4-dev libmarble-dev
 $ qmake nbproject/qt-Release.pro
 $ make
 
+== Update GeoIp databases ==
+You need to download GeoIp updates, this might take a while.
+Using the script (on Gentoo):
+$ sudo geoipupdate.sh
+Or downloading and copying at least GeoLiteCity manually:
+$ wget geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+$ sudo gunzip -fdc GeoLiteCity.dat.gz > /usr/share/GeoIP/GeoLiteCity.dat
+
 == Run ==
 $ dist/Release/GNU-Linux-x86/QtGeoIp
