@@ -7,6 +7,7 @@
 
 #include "MainWindow.h"
 
+
 MainWindow::MainWindow()
 {
     widget.setupUi(this);
@@ -18,16 +19,20 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::customSetupUi()
-{   
+{
+    updateZoomTimer = new QTimer(this);
+
     // Adds marble widget
     marbleWidget = new CustomMarbleWidget();
     marbleWidget->setMapThemeId("earth/plain/plain.dgml");
+    marbleWidget->setAnimationsEnabled(true);
     marbleWidget->goHome();
     widget.middleVerticalLayout->addWidget(marbleWidget);
 
     // setup signals/slots hooks
     connect(widget.searchButton, SIGNAL(clicked()),
             this, SLOT(geoCodeIp()));
+     connect(updateZoomTimer, SIGNAL(timeout()), this, SLOT(updateZoom()));
 }
 
 GeoIPRecord* MainWindow::get_ip_record(const std::string& ip)
@@ -78,13 +83,32 @@ void MainWindow::update_map_from_record(
         marker.longitude = longitude;
         marker.text = ip;
         marbleWidget->addMarker(marker);
-        marbleWidget->centerOn(longitude, latitude, true);
-        marbleWidget->zoomView(1500, Linear);
+        GeoDataCoordinates geoDataCoordinates(
+        longitude, latitude, defaultZoom, GeoDataCoordinates::Degree);
+        // marbleWidget->centerOn(longitude, latitude, true);
+        marbleWidget->centerOn(geoDataCoordinates, true);
+        // marbleWidget->zoomView(defaultZoom, Jump);
+    }
+}
+
+/**
+ * This is a workaround to make zoom working after map centering
+ */
+void MainWindow::updateZoom()
+{
+    updateZoomTimer->stop();
+    if(marbleWidget->zoom() != defaultZoom)
+    {
+        marbleWidget->zoomView(defaultZoom, Jump);
     }
 }
 
 void MainWindow::geoCodeIp()
 {
+    if(marbleWidget->zoom() != defaultZoom)
+    {
+        updateZoomTimer->start(1000);
+    }
     std::string ip = widget.ipLineEdit->text().toStdString();
     GeoIPRecord* geoIPRecord = get_ip_record(ip);
     update_labels_from_record(geoIPRecord);

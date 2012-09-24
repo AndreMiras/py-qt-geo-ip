@@ -13,9 +13,13 @@
 // #include <marble/MarbleWidget.h>
 // #include <GeoIP.h>
 #include <GeoIPCity.h>
+#include <QTimer>
 
 using namespace Marble;
 using namespace std;
+
+
+const int defaultZoom = 1500;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -29,9 +33,11 @@ private slots:
      *  - places map marker from ip lat/long
      */
     void geoCodeIp();
+    void updateZoom();
 private:
     Ui::MainWindow widget;
-    CustomMarbleWidget *marbleWidget;
+    CustomMarbleWidget* marbleWidget;
+    QTimer* updateZoomTimer;
 
     /**
      * Setups marble widget
