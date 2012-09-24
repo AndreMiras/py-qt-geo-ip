@@ -88,5 +88,8 @@ void MainWindow::geoCodeIp()
     GeoIPRecord* geoIPRecord = get_ip_record(ip);
     update_labels_from_record(geoIPRecord);
     update_map_from_record(geoIPRecord, ip);
-    GeoIPRecord_delete(geoIPRecord);
+    if(geoIPRecord != NULL)
+    {
+        GeoIPRecord_delete(geoIPRecord);
+    }
 }
