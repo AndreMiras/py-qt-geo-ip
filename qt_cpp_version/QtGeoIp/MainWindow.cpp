@@ -22,6 +22,7 @@ void MainWindow::customSetupUi()
     // Adds marble widget
     marbleWidget = new CustomMarbleWidget();
     marbleWidget->setMapThemeId("earth/plain/plain.dgml");
+    marbleWidget->goHome();
     widget.middleVerticalLayout->addWidget(marbleWidget);
 
     // setup signals/slots hooks
@@ -78,7 +79,7 @@ void MainWindow::update_map_from_record(
         marker.text = ip;
         marbleWidget->addMarker(marker);
         marbleWidget->centerOn(longitude, latitude, true);
-        // # self.marble.zoomView(1500, Marble.Linear)
+        marbleWidget->zoomView(1500, Linear);
     }
 }
 
