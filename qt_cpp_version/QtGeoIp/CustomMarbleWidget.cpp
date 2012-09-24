@@ -13,11 +13,6 @@ CustomMarbleWidget::CustomMarbleWidget()
     this->marker = NULL; // TODO: DRY
 }
 
-CustomMarbleWidget::CustomMarbleWidget(const CustomMarbleWidget& orig)
-{
-    this->marker = NULL; // TODO: DRY
-}
-
 CustomMarbleWidget::~CustomMarbleWidget()
 {
     if(marker != NULL)

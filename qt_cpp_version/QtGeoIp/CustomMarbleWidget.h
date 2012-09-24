@@ -23,7 +23,6 @@ typedef struct MarkerTag {
 class CustomMarbleWidget : public MarbleWidget {
 public:
     CustomMarbleWidget();
-    CustomMarbleWidget(const CustomMarbleWidget& orig);
     virtual ~CustomMarbleWidget();
 
     /**
