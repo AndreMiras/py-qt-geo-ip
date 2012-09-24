@@ -1,7 +1,6 @@
 = Install =
 
 == Install deps ==
-
 You need to install Qt library as well as Marble library to be able to build the code.
 Here is how to do it on both Ubuntu and Gentoo.
 
@@ -12,7 +11,6 @@ $ sudo apt-get install libqt4-dev libmarble-dev
 # emerge -av x11-libs/qt-core x11-libs/qt-gui kde-base/marble
 
 == Compile ==
-
 $ qmake nbproject/qt-Release.pro
 $ make
 
