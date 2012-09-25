@@ -6,7 +6,9 @@
  */
 
 #include "MainWindow.h"
-
+#include <QFile>
+#include <QMessageBox>
+#include <marble/GeoPainter.h>
 
 MainWindow::MainWindow()
 {
@@ -38,10 +40,21 @@ void MainWindow::customSetupUi()
 GeoIPRecord* MainWindow::get_ip_record(const std::string& ip)
 {
     GeoIP * gi;
-    // TODO: handle if the file doesn't exit
-    gi = GeoIP_open("/usr/share/GeoIP/GeoLiteCity.dat", GEOIP_STANDARD);
-    GeoIPRecord* geoIPRecord = GeoIP_record_by_addr(gi, ip.c_str());
-    GeoIP_delete(gi);
+    GeoIPRecord* geoIPRecord;
+
+    if (QFile(QString::fromStdString(geoIpPath)).exists())
+    {
+        gi = GeoIP_open(geoIpPath.c_str(), GEOIP_STANDARD);
+        geoIPRecord = GeoIP_record_by_addr(gi, ip.c_str());
+        GeoIP_delete(gi);
+    }
+    else
+    {
+        geoIPRecord = NULL;
+        QMessageBox msgBox;
+        msgBox.setText("File not found: " + QString::fromStdString(geoIpPath));
+        msgBox.exec();
+    }
     return geoIPRecord;
 }
 
@@ -105,16 +118,16 @@ void MainWindow::updateZoom()
 
 void MainWindow::geoCodeIp()
 {
-    if(marbleWidget->zoom() != defaultZoom)
-    {
-        updateZoomTimer->start(1000);
-    }
     std::string ip = widget.ipLineEdit->text().toStdString();
     GeoIPRecord* geoIPRecord = get_ip_record(ip);
     update_labels_from_record(geoIPRecord);
     update_map_from_record(geoIPRecord, ip);
     if(geoIPRecord != NULL)
     {
+        if(marbleWidget->zoom() != defaultZoom)
+        {
+            updateZoomTimer->start(1000);
+        }
         GeoIPRecord_delete(geoIPRecord);
     }
 }

@@ -20,6 +20,7 @@ using namespace std;
 
 
 const int defaultZoom = 1500;
+const string geoIpPath = "/usr/share/GeoIP/GeoLiteCity.dat";
 
 class MainWindow : public QMainWindow {
     Q_OBJECT

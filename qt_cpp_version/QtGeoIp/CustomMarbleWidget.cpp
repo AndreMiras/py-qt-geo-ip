@@ -10,7 +10,7 @@
 
 CustomMarbleWidget::CustomMarbleWidget()
 {
-    this->marker = NULL; // TODO: DRY
+    this->marker = NULL;
 }
 
 CustomMarbleWidget::~CustomMarbleWidget()
