@@ -1,0 +1,13 @@
+= Release notes =
+
+== 0.2 ==
+    - created a C++/Qt version of the program
+    - added settings menu (C++/Qt)
+        - ability to choose GeoLiteCity.dat path (C++/Qt)
+        - ability to choose map theme (C++/Qt)
+    - map navigation animation enhancements (C++/Qt)
+    - added delivery scripts (C++/Qt)
+    - removed map (lat/long) grid (C++/Qt)
+
+== 0.1 ==
+    - initial release
