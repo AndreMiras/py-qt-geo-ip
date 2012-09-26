@@ -10,7 +10,6 @@ docs_dir="docs/"
 nbproject_dir="nbproject/"
 nbproject_files="configurations.xml project.xml
     qt-Debug.pro qt-Release.pro
-    qt-Debug.mk qt-Release.mk
     Makefile-Debug.mk Makefile-Release.mk
     Package-Debug.bash Package-Release.bash
     Makefile-variables.mk Makefile-impl.mk Makefile"
