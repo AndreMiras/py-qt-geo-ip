@@ -1,20 +1,27 @@
-= Install =
+#summary QtGeoIp installation notes.
 
-== Install deps ==
+= Introduction =
+
+This installation note guides you through QtGeoIp installation.
+
+
+= Install deps =
 You need to install Qt library as well as Marble library to be able to build the code.
 Here is how to do it on both Ubuntu and Gentoo.
 
-=== Ubuntu ===
+== Ubuntu ==
 $ sudo apt-get install libqt4-dev libmarble-dev
 
-=== Gentoo ===
+== Gentoo ==
 # emerge -av x11-libs/qt-core x11-libs/qt-gui kde-base/marble
 
-== Compile ==
+
+= Compile =
 $ qmake nbproject/qt-Release.pro
 $ make
 
-== Update GeoIp databases ==
+
+= Update GeoIp databases =
 You need to download GeoIp updates, this might take a while.
 Using the script (on Gentoo):
 $ sudo geoipupdate.sh
@@ -22,5 +29,6 @@ Or downloading and copying at least GeoLiteCity manually:
 $ wget geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 $ sudo gunzip -fdc GeoLiteCity.dat.gz > /usr/share/GeoIP/GeoLiteCity.dat
 
-== Run ==
+
+= Run =
 $ dist/Release/GNU-Linux-x86/QtGeoIp
