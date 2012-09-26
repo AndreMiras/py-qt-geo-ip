@@ -53,7 +53,7 @@ void MainWindow::customSetupUi()
     // adds marble widget
     marbleWidget = new CustomMarbleWidget();
     updateMapTheme();
-    // marbleWidget->setMapThemeId(defaultMapTheme);
+    marbleWidget->setShowGrid(false);
     marbleWidget->setAnimationsEnabled(true);
     marbleWidget->goHome();
     widget.middleVerticalLayout->addWidget(marbleWidget);
@@ -184,6 +184,8 @@ void MainWindow::updateMapTheme()
     if (marbleWidget->mapThemeId() != mapTheme)
     {
         marbleWidget->setMapThemeId(mapTheme);
+        // for some reasons showGrid state is lost after setting map theme
+        marbleWidget->setShowGrid(false);
     }
 }
 
