@@ -6,9 +6,16 @@
  */
 
 #include "MainWindow.h"
+#include "PreferencesForm.h"
 #include <QFile>
 #include <QMessageBox>
+#include <QSettings>
 #include <marble/GeoPainter.h>
+#include <qt4/QtCore/qcoreapplication.h>
+
+
+const string MainWindow::geoIpDefaultPath =
+        "/usr/share/GeoIP/GeoLiteCity.dat";
 
 MainWindow::MainWindow()
 {
@@ -18,33 +25,58 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+    if (preferencesForm != NULL)
+    {
+        delete preferencesForm;
+    }
 }
 
 void MainWindow::customSetupUi()
 {
+    QApplication::setApplicationName(applicationName);
     updateZoomTimer = new QTimer(this);
 
-    // Adds marble widget
+    // adds marble widget
     marbleWidget = new CustomMarbleWidget();
     marbleWidget->setMapThemeId("earth/plain/plain.dgml");
     marbleWidget->setAnimationsEnabled(true);
     marbleWidget->goHome();
     widget.middleVerticalLayout->addWidget(marbleWidget);
 
-    // setup signals/slots hooks
+    preferencesForm = NULL;
+
+    // setups signals/slots hooks
     connect(widget.searchButton, SIGNAL(clicked()),
             this, SLOT(geoCodeIp()));
-     connect(updateZoomTimer, SIGNAL(timeout()), this, SLOT(updateZoom()));
+    connect(widget.actionPreferences, SIGNAL(triggered()),
+            this, SLOT(openSettings()));
+    connect(updateZoomTimer, SIGNAL(timeout()),
+            this, SLOT(updateZoom()));
+}
+
+void MainWindow::openSettings()
+{
+    if(preferencesForm == NULL)
+    {
+        preferencesForm = new PreferencesForm();
+    }
+    preferencesForm->exec();
 }
 
 GeoIPRecord* MainWindow::get_ip_record(const std::string& ip)
 {
     GeoIP * gi;
     GeoIPRecord* geoIPRecord;
+    QSettings settings;
+    QString geoLiteCityPath;
 
-    if (QFile(QString::fromStdString(geoIpPath)).exists())
+    geoLiteCityPath = settings.value(
+            "geoLiteCityPath",
+            QString::fromStdString(MainWindow::geoIpDefaultPath)).toString();
+
+    if (QFile(geoLiteCityPath).exists())
     {
-        gi = GeoIP_open(geoIpPath.c_str(), GEOIP_STANDARD);
+        gi = GeoIP_open(geoLiteCityPath.toStdString().c_str(), GEOIP_STANDARD);
         geoIPRecord = GeoIP_record_by_addr(gi, ip.c_str());
         GeoIP_delete(gi);
     }
@@ -52,7 +84,7 @@ GeoIPRecord* MainWindow::get_ip_record(const std::string& ip)
     {
         geoIPRecord = NULL;
         QMessageBox msgBox;
-        msgBox.setText("File not found: " + QString::fromStdString(geoIpPath));
+        msgBox.setText("File not found: " + geoLiteCityPath);
         msgBox.exec();
     }
     return geoIPRecord;

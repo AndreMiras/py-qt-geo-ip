@@ -10,8 +10,7 @@
 
 #include "ui_main_window_ui.h"
 #include "CustomMarbleWidget.h"
-// #include <marble/MarbleWidget.h>
-// #include <GeoIP.h>
+#include "PreferencesForm.h"
 #include <GeoIPCity.h>
 #include <QTimer>
 
@@ -20,11 +19,12 @@ using namespace std;
 
 
 const int defaultZoom = 1500;
-const string geoIpPath = "/usr/share/GeoIP/GeoLiteCity.dat";
+const QString applicationName = "QtGeoIp";
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
+    static const string geoIpDefaultPath;
     MainWindow();
     virtual ~MainWindow();
 private slots:
@@ -35,10 +35,12 @@ private slots:
      */
     void geoCodeIp();
     void updateZoom();
+    void openSettings();
 private:
     Ui::MainWindow widget;
     CustomMarbleWidget* marbleWidget;
     QTimer* updateZoomTimer;
+    PreferencesForm* preferencesForm;
 
     /**
      * Setups marble widget

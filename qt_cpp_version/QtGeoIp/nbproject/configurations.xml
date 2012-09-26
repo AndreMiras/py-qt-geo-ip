@@ -29,6 +29,9 @@
     </logicalFolder>
     <itemPath>MainWindow.cpp</itemPath>
     <itemPath>MainWindow.h</itemPath>
+    <itemPath>PreferencesForm.cpp</itemPath>
+    <itemPath>PreferencesForm.h</itemPath>
+    <itemPath>PreferencesForm.ui</itemPath>
     <itemPath>main_window_ui.ui</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
