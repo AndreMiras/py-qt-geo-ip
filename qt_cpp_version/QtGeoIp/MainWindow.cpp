@@ -14,13 +14,15 @@
 #include <qt4/QtCore/qcoreapplication.h>
 
 
-const string MainWindow::geoIpDefaultPath =
+const string MainWindow::defaultGeoIpPath =
         "/usr/share/GeoIP/GeoLiteCity.dat";
+const string MainWindow::defaultMapTheme = "earth/plain/plain.dgml";
 
 MainWindow::MainWindow()
 {
     widget.setupUi(this);
     customSetupUi();
+    setupSignalsSlots();
 }
 
 MainWindow::~MainWindow()
@@ -31,20 +33,8 @@ MainWindow::~MainWindow()
     }
 }
 
-void MainWindow::customSetupUi()
+void MainWindow::setupSignalsSlots()
 {
-    QApplication::setApplicationName(applicationName);
-    updateZoomTimer = new QTimer(this);
-
-    // adds marble widget
-    marbleWidget = new CustomMarbleWidget();
-    marbleWidget->setMapThemeId("earth/plain/plain.dgml");
-    marbleWidget->setAnimationsEnabled(true);
-    marbleWidget->goHome();
-    widget.middleVerticalLayout->addWidget(marbleWidget);
-
-    preferencesForm = NULL;
-
     // setups signals/slots hooks
     connect(widget.searchButton, SIGNAL(clicked()),
             this, SLOT(geoCodeIp()));
@@ -54,13 +44,52 @@ void MainWindow::customSetupUi()
             this, SLOT(updateZoom()));
 }
 
+void MainWindow::customSetupUi()
+{
+    QApplication::setApplicationName(applicationName);
+    updateZoomTimer = new QTimer(this);
+    preferencesForm = NULL;
+
+    // adds marble widget
+    marbleWidget = new CustomMarbleWidget();
+    updateMapTheme();
+    // marbleWidget->setMapThemeId(defaultMapTheme);
+    marbleWidget->setAnimationsEnabled(true);
+    marbleWidget->goHome();
+    widget.middleVerticalLayout->addWidget(marbleWidget);
+
+}
+
 void MainWindow::openSettings()
 {
     if(preferencesForm == NULL)
     {
         preferencesForm = new PreferencesForm();
+        connect(preferencesForm, SIGNAL(accepted()),
+                this, SLOT(updateMapTheme()));
     }
     preferencesForm->exec();
+}
+
+QString MainWindow::getMapTheme()
+{
+    QString mapTheme;
+    QSettings settings;
+
+    // if the preference form was opened to update the map theme
+    if (preferencesForm != NULL)
+    {
+        mapTheme = preferencesForm->getMapTheme();
+    }
+    // otherwise get it from saved settings
+    else
+    {
+        mapTheme = settings.value(
+            "mapTheme",
+            QString::fromStdString(MainWindow::defaultMapTheme)).toString();
+    }
+
+    return mapTheme;
 }
 
 GeoIPRecord* MainWindow::get_ip_record(const std::string& ip)
@@ -72,7 +101,7 @@ GeoIPRecord* MainWindow::get_ip_record(const std::string& ip)
 
     geoLiteCityPath = settings.value(
             "geoLiteCityPath",
-            QString::fromStdString(MainWindow::geoIpDefaultPath)).toString();
+            QString::fromStdString(MainWindow::defaultGeoIpPath)).toString();
 
     if (QFile(geoLiteCityPath).exists())
     {
@@ -145,6 +174,16 @@ void MainWindow::updateZoom()
     if(marbleWidget->zoom() != defaultZoom)
     {
         marbleWidget->zoomView(defaultZoom, Jump);
+    }
+}
+
+void MainWindow::updateMapTheme()
+{
+    QString mapTheme = getMapTheme();
+
+    if (marbleWidget->mapThemeId() != mapTheme)
+    {
+        marbleWidget->setMapThemeId(mapTheme);
     }
 }
 

@@ -16,6 +16,8 @@ public:
     PreferencesForm();
     virtual ~PreferencesForm();
 
+    QString getMapTheme();
+
 private slots:
     void browse();
     void saveSettings();

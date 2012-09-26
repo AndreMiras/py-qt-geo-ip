@@ -24,7 +24,8 @@ const QString applicationName = "QtGeoIp";
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    static const string geoIpDefaultPath;
+    static const string defaultGeoIpPath;
+    static const string defaultMapTheme;
     MainWindow();
     virtual ~MainWindow();
 private slots:
@@ -35,6 +36,7 @@ private slots:
      */
     void geoCodeIp();
     void updateZoom();
+    void updateMapTheme();
     void openSettings();
 private:
     Ui::MainWindow widget;
@@ -42,6 +44,7 @@ private:
     QTimer* updateZoomTimer;
     PreferencesForm* preferencesForm;
 
+    void setupSignalsSlots();
     /**
      * Setups marble widget
      */
@@ -52,6 +55,9 @@ private:
      * @return 
      */
     GeoIPRecord* get_ip_record(const string& ip);
+
+    QString getMapTheme();
+
     /**
      * Updates the IP information box labels.
      * @param record_by_addr
