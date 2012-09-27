@@ -11,7 +11,6 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <marble/GeoPainter.h>
-#include <qt4/QtCore/qcoreapplication.h>
 
 
 const string MainWindow::defaultGeoIpPath =
