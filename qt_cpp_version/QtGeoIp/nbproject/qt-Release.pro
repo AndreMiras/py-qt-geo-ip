@@ -21,3 +21,9 @@ QMAKE_CXX = g++
 DEFINES += 
 INCLUDEPATH += 
 LIBS += -lmarblewidget -lGeoIP  
+win32 {
+CONFIG += static
+# mingw path & marble install paths
+LIBS += -L/usr/local/lib -L'/c/Program Files/Marble/'
+INCLUDEPATH += /usr/local/include
+}
