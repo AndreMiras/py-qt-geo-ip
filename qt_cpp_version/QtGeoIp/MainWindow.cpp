@@ -8,8 +8,8 @@
 #include "MainWindow.h"
 #include "PreferencesForm.h"
 #include <QFile>
-#include <QMessageBox>
 #include <QSettings>
+#include <QMessageBox>
 #include <marble/GeoPainter.h>
 #include <qt4/QtCore/qcoreapplication.h>
 
@@ -17,6 +17,7 @@
 const string MainWindow::defaultGeoIpPath =
         "/usr/share/GeoIP/GeoLiteCity.dat";
 const string MainWindow::defaultMapTheme = "earth/plain/plain.dgml";
+QString MainWindow::settingsFilename;
 
 MainWindow::MainWindow()
 {
@@ -46,7 +47,7 @@ void MainWindow::setupSignalsSlots()
 
 void MainWindow::customSetupUi()
 {
-    QApplication::setApplicationName(applicationName);
+    settingsFilename = QCoreApplication::applicationName();
     updateZoomTimer = new QTimer(this);
     preferencesForm = NULL;
 
@@ -60,6 +61,10 @@ void MainWindow::customSetupUi()
 
 }
 
+QString MainWindow::getSettingsFilename()
+{
+    return settingsFilename;
+}
 void MainWindow::openSettings()
 {
     if(preferencesForm == NULL)
@@ -74,7 +79,7 @@ void MainWindow::openSettings()
 QString MainWindow::getMapTheme()
 {
     QString mapTheme;
-    QSettings settings;
+    QSettings settings(settingsFilename);
 
     // if the preference form was opened to update the map theme
     if (preferencesForm != NULL)
@@ -96,13 +101,12 @@ GeoIPRecord* MainWindow::get_ip_record(const std::string& ip)
 {
     GeoIP * gi;
     GeoIPRecord* geoIPRecord;
-    QSettings settings;
+    QSettings settings(settingsFilename);
     QString geoLiteCityPath;
 
     geoLiteCityPath = settings.value(
             "geoLiteCityPath",
             QString::fromStdString(MainWindow::defaultGeoIpPath)).toString();
-
     if (QFile(geoLiteCityPath).exists())
     {
         gi = GeoIP_open(geoLiteCityPath.toStdString().c_str(), GEOIP_STANDARD);

@@ -13,13 +13,13 @@
 #include "PreferencesForm.h"
 #include <GeoIPCity.h>
 #include <QTimer>
+#include <QString>
 
 using namespace Marble;
 using namespace std;
 
 
 const int defaultZoom = 1500;
-const QString applicationName = "QtGeoIp";
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -28,6 +28,7 @@ public:
     static const string defaultMapTheme;
     MainWindow();
     virtual ~MainWindow();
+    static QString getSettingsFilename();
 private slots:
     /**
      * Geocodes IP:
@@ -43,6 +44,7 @@ private:
     CustomMarbleWidget* marbleWidget;
     QTimer* updateZoomTimer;
     PreferencesForm* preferencesForm;
+    static QString settingsFilename;
 
     void setupSignalsSlots();
     /**

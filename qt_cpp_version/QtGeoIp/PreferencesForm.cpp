@@ -33,7 +33,7 @@ void PreferencesForm::setupSignalsSlots()
 
 void PreferencesForm::customSetupUi()
 {
-    QSettings settings;
+    QSettings settings(MainWindow::getSettingsFilename());
     int mapThemeComboBoxIndex;
 
     QString geoLiteCityPath = settings.value(
@@ -71,7 +71,7 @@ QString PreferencesForm::getMapTheme()
 
 void PreferencesForm::saveSettings()
 {
-    QSettings settings;
+    QSettings settings(MainWindow::getSettingsFilename());
 
     settings.setValue(
             "geoLiteCityPath", widget.geoLiteCityPathLineEdit->text());
