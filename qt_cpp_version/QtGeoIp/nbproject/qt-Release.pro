@@ -6,6 +6,7 @@ TARGET = QtGeoIp
 VERSION = 1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += release 
+PKGCONFIG +=
 QT = core gui
 SOURCES += MainWindow.cpp main.cpp PreferencesForm.cpp CustomMarbleWidget.cpp
 HEADERS += PreferencesForm.h CustomMarbleWidget.h MainWindow.h
@@ -21,9 +22,3 @@ QMAKE_CXX = g++
 DEFINES += 
 INCLUDEPATH += 
 LIBS += -lmarblewidget -lGeoIP  
-win32 {
-CONFIG += static
-# mingw path & marble install paths
-LIBS += -L/usr/local/lib -L'/c/Program Files/Marble/'
-INCLUDEPATH += /usr/local/include
-}

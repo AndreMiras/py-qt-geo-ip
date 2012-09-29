@@ -6,6 +6,7 @@ TARGET = QtGeoIp
 VERSION = 1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
+PKGCONFIG +=
 QT = core gui
 SOURCES += MainWindow.cpp main.cpp PreferencesForm.cpp CustomMarbleWidget.cpp
 HEADERS += PreferencesForm.h CustomMarbleWidget.h MainWindow.h

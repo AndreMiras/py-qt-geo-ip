@@ -17,8 +17,7 @@ $ sudo apt-get install libqt4-dev libmarble-dev
 
 
 = Compile =
-$ qmake nbproject/qt-Release.pro
-$ make
+$ make QMAKE=/usr/bin/qmake CONF=Release
 
 
 = Update GeoIp databases =
