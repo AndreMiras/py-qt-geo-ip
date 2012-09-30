@@ -1,5 +1,5 @@
 /*
- * File:   newForm.cpp
+ * File:   MainWindow.cpp
  * Author: andre
  *
  * Created on September 23, 2012, 11:09 PM

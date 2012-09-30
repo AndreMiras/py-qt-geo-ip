@@ -1,3 +1,7 @@
 *.pyc
 *.swp
 delivery/
+qt-Debug.mk
+qt-Release.mk
+ui_*.h
+moc_*.cpp
