@@ -184,12 +184,30 @@
     </property>
     <addaction name="actionPreferences"/>
    </widget>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionDownloadMaps"/>
+    <addaction name="actionDownloadGeoCityLite"/>
+   </widget>
+   <addaction name="menu_File"/>
    <addaction name="menuSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences...</string>
+   </property>
+  </action>
+  <action name="actionDownloadMaps">
+   <property name="text">
+    <string>Download &amp;Maps</string>
+   </property>
+  </action>
+  <action name="actionDownloadGeoCityLite">
+   <property name="text">
+    <string>Download &amp;GeoLite DB</string>
    </property>
   </action>
  </widget>

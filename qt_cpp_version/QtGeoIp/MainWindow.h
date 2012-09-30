@@ -39,6 +39,8 @@ private slots:
     void updateZoom();
     void updateMapTheme();
     void openSettings();
+    void openDownloadMap();
+    void openDownloadGeoLite();
 private:
     Ui::MainWindow widget;
     CustomMarbleWidget* marbleWidget;

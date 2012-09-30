@@ -7,9 +7,11 @@
 
 #include "MainWindow.h"
 #include "PreferencesForm.h"
+#include <QUrl>
 #include <QFile>
 #include <QSettings>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include <marble/GeoPainter.h>
 
 
@@ -40,6 +42,10 @@ void MainWindow::setupSignalsSlots()
             this, SLOT(geoCodeIp()));
     connect(widget.actionPreferences, SIGNAL(triggered()),
             this, SLOT(openSettings()));
+    connect(widget.actionDownloadMaps, SIGNAL(triggered()),
+            this, SLOT(openDownloadMap()));
+    connect(widget.actionDownloadGeoCityLite, SIGNAL(triggered()),
+            this, SLOT(openDownloadGeoLite()));
     connect(updateZoomTimer, SIGNAL(timeout()),
             this, SLOT(updateZoom()));
 }
@@ -64,6 +70,7 @@ QString MainWindow::getSettingsFilename()
 {
     return settingsFilename;
 }
+
 void MainWindow::openSettings()
 {
     if(preferencesForm == NULL)
@@ -73,6 +80,18 @@ void MainWindow::openSettings()
                 this, SLOT(updateMapTheme()));
     }
     preferencesForm->exec();
+}
+
+void MainWindow::openDownloadMap()
+{
+     QUrl url("http://edu.kde.org/marble/maps.php");
+     QDesktopServices::openUrl(url);
+}
+
+void MainWindow::openDownloadGeoLite()
+{
+     QUrl url("http://www.maxmind.com/en/geolite");
+     QDesktopServices::openUrl(url);
 }
 
 QString MainWindow::getMapTheme()
