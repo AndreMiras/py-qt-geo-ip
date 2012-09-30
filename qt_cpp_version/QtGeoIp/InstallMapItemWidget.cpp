@@ -6,8 +6,7 @@
  */
 
 #include "InstallMapItemWidget.h"
-#include <quazip/quazipfile.h>
-#include <quazip/quazip.h>
+#include <quazip/JlCompress.h>
 #include <QDesktopServices>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -195,98 +194,15 @@ void InstallMapItemWidget::unZipFile()
 void InstallMapItemWidget::unZipFile(
         const QString& zipfilename, const QString& extDirPath)
 {
-// static bool extract(const QString & filePath, const QString & extDirPath, const QString & singleFileName = QString("")) {
-
-    QuaZip zip(zipfilename);
-
-    if (!zip.open(QuaZip::mdUnzip))
+    // QStringList list =
+    JlCompress::extractDir(
+                           zipfilename, extDirPath);
+    /*
+    for (int i=0,n=list.count();i<n;i++)
     {
-        qWarning("testRead(): zip.open(): %d", zip.getZipError());
-        return; // false;
+        qDebug("%2i : %s",i,qPrintable(list.at(i)));
     }
-
-    zip.setFileNameCodec("IBM866");
-
-    qWarning("%d entries\n", zip.getEntriesCount());
-    qWarning("Global comment: %s\n", zip.getComment().toLocal8Bit().constData());
-
-    QuaZipFileInfo info;
-
-    QuaZipFile file(&zip);
-
-    QFile out;
-    QString name;
-    char c;
-    // TODO: code readability
-    for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile())
-    {
-
-        if (!zip.getCurrentFileInfo(&info))
-        {
-            qWarning("testRead(): getCurrentFileInfo(): %d\n", zip.getZipError());
-            return; // false;
-        }
-        /*
-        if (!singleFileName.isEmpty())
-            if (!info.name.contains(singleFileName))
-                continue;
-         */
-        if (!file.open(QIODevice::ReadOnly))
-        {
-            qWarning("testRead(): file.open(): %d", file.getZipError());
-            return; // false;
-        }
-
-        name = QString("%1/%2").arg(extDirPath).arg(file.getActualFileName());
-
-        if (file.getZipError() != UNZ_OK)
-        {
-            qWarning("testRead(): file.getFileName(): %d", file.getZipError());
-            return; // false;
-        }
-
-        //out.setFileName("out/" + name);
-        out.setFileName(name);
-
-        // this will fail if "name" contains subdirectories, but we don't mind that
-        out.open(QIODevice::WriteOnly);
-        // Slow like hell (on GNU/Linux at least), but it is not my fault.
-        // Not ZIP/UNZIP package's fault either.
-        // The slowest thing here is out.putChar(c).
-        while (file.getChar(&c)) out.putChar(c);
-
-        out.close();
-
-        if (file.getZipError() != UNZ_OK)
-        {
-            qWarning("testRead(): file.getFileName(): %d", file.getZipError());
-            return; // false;
-        }
-
-        if (!file.atEnd())
-        {
-            qWarning("testRead(): read all but not EOF");
-            return; // false;
-        }
-
-        file.close();
-
-        if (file.getZipError() != UNZ_OK)
-        {
-            qWarning("testRead(): file.close(): %d", file.getZipError());
-            return; // false;
-        }
-    }
-
-    zip.close();
-
-    if (zip.getZipError() != UNZ_OK)
-    {
-        qWarning("testRead(): zip.close(): %d", zip.getZipError());
-        return; // false;
-    }
-
-    return; // true;
+     */
 }
 
 void InstallMapItemWidget::updateWidget()
