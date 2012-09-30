@@ -52,13 +52,14 @@
         <compilerSet>default</compilerSet>
       </toolsSet>
       <qt>
-        <modules>core gui</modules>
+        <modules>core gui network</modules>
       </qt>
       <compileType>
         <linkerTool>
           <linkerLibItems>
             <linkerLibLibItem>marblewidget</linkerLibLibItem>
             <linkerLibLibItem>GeoIP</linkerLibLibItem>
+            <linkerLibLibItem>quazip</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -89,6 +90,7 @@
           <linkerLibItems>
             <linkerLibLibItem>marblewidget</linkerLibLibItem>
             <linkerLibLibItem>GeoIP</linkerLibLibItem>
+            <linkerLibLibItem>quazip</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

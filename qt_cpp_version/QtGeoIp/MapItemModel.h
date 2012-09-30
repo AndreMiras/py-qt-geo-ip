@@ -13,14 +13,13 @@
 class MapItemModel {
 public:
     MapItemModel(const QString& name);
-    MapItemModel(const MapItemModel& orig);
     virtual ~MapItemModel();
     void setName(const QString& name);
     void setDescription(const QString& description);
     void setDownloadLink(const QString& downloadLink);
-    QString getName();
-    QString getDescription();
-    QString getDownloadLink();
+    QString getName() const;
+    QString getDescription() const;
+    QString getDownloadLink() const;
 private:
     QString name;
     QString description;

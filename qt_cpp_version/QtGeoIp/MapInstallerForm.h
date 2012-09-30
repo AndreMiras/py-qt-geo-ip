@@ -17,6 +17,10 @@ public:
     MapInstallerForm();
     virtual ~MapInstallerForm();
     void addInstallMapItem(InstallMapItemWidget* installMapItemWidget);
+
+private slots:
+    void installMap(const MapItemModel& mapItemModel);
+
 private:
     Ui::MapInstallerForm widget;
     void customSetupUi();

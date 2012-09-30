@@ -10,18 +10,50 @@
 
 #include "ui_InstallMapItemWidget.h"
 #include "MapItemModel.h"
+#include <QNetworkAccessManager>
+#include <QProgressDialog>
+#include <QFile>
 
-class InstallMapItemWidget : public QWidget {
+class InstallMapItemWidget : public QWidget
+{
     Q_OBJECT
 public:
     InstallMapItemWidget(MapItemModel* mapItemModel);
     virtual ~InstallMapItemWidget();
     MapItemModel* getMapItemModel();
     void setMapItemModel(MapItemModel* mapItemModel);
+
+signals:
+       void installButtonClicked(const MapItemModel& mapItemModel);
+       void useButtonClicked(const MapItemModel& mapItemModel);
+
+private slots:
+    void emitInstallButtonClicked();
+    void emitUseButtonClicked();
+
+    void downloadButtonPressed();
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    /**
+     * Performs some clean-up
+     */
+    void downloadFinished();
+    void unZipFile();
+    void downloadReadyRead();
+    void cancelDownload();
+
 private:
     Ui::InstallMapItemWidget widget;
     MapItemModel* mapItemModel;
+    void setupSignalsSlots();
+    void customSetupUi();
     void updateWidget();
+    void unZipFile(const QString& zipfilename, const QString& extDirPath);
+
+    QNetworkAccessManager manager;
+    QFile *file;
+    QProgressDialog *progressDialog;
+    QNetworkReply *reply;
+    bool downloadRequestAborted;
 };
 
 #endif	/* _INSTALLMAPITEMWIDGET_H */

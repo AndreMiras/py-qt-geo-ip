@@ -10,11 +10,10 @@
 MapItemModel::MapItemModel(const QString& name)
 {
     setName(name);
+    setDescription("");
+    setDownloadLink("");
 }
 
-MapItemModel::MapItemModel(const MapItemModel& orig)
-{
-}
 
 MapItemModel::~MapItemModel()
 {
@@ -36,17 +35,17 @@ void MapItemModel::setDownloadLink(const QString& downloadLink)
     this->downloadLink = downloadLink;
 }
 
-QString MapItemModel::getName()
+QString MapItemModel::getName() const
 {
     return name;
 }
 
-QString MapItemModel::getDescription()
+QString MapItemModel::getDescription() const
 {
     return description;
 }
 
-QString MapItemModel::getDownloadLink()
+QString MapItemModel::getDownloadLink() const
 {
     return downloadLink;
 }
