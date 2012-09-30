@@ -33,6 +33,10 @@ MainWindow::~MainWindow()
     {
         delete preferencesForm;
     }
+    if (mapInstallerForm != NULL)
+    {
+        delete mapInstallerForm;
+    }
 }
 
 void MainWindow::setupSignalsSlots()
@@ -55,6 +59,7 @@ void MainWindow::customSetupUi()
     settingsFilename = QCoreApplication::applicationName();
     updateZoomTimer = new QTimer(this);
     preferencesForm = NULL;
+    mapInstallerForm = NULL;
 
     // adds marble widget
     marbleWidget = new CustomMarbleWidget();
@@ -82,16 +87,28 @@ void MainWindow::openSettings()
     preferencesForm->exec();
 }
 
+void MainWindow::openMapInstaller()
+{
+    if(mapInstallerForm == NULL)
+    {
+        mapInstallerForm = new MapInstallerForm();
+    }
+    mapInstallerForm->exec();
+}
+
 void MainWindow::openDownloadMap()
 {
-     QUrl url("http://edu.kde.org/marble/maps.php");
-     QDesktopServices::openUrl(url);
+    openMapInstaller();
+    /*
+    QUrl url("http://edu.kde.org/marble/maps.php");
+    QDesktopServices::openUrl(url);
+    */
 }
 
 void MainWindow::openDownloadGeoLite()
 {
-     QUrl url("http://www.maxmind.com/en/geolite");
-     QDesktopServices::openUrl(url);
+    QUrl url("http://www.maxmind.com/en/geolite");
+    QDesktopServices::openUrl(url);
 }
 
 QString MainWindow::getMapTheme()

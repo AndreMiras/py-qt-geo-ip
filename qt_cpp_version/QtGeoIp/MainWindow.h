@@ -11,6 +11,7 @@
 #include "ui_main_window_ui.h"
 #include "CustomMarbleWidget.h"
 #include "PreferencesForm.h"
+#include "MapInstallerForm.h"
 #include <GeoIPCity.h>
 #include <QTimer>
 #include <QString>
@@ -39,6 +40,7 @@ private slots:
     void updateZoom();
     void updateMapTheme();
     void openSettings();
+    void openMapInstaller();
     void openDownloadMap();
     void openDownloadGeoLite();
 private:
@@ -46,6 +48,7 @@ private:
     CustomMarbleWidget* marbleWidget;
     QTimer* updateZoomTimer;
     PreferencesForm* preferencesForm;
+    MapInstallerForm* mapInstallerForm;
     static QString settingsFilename;
 
     void setupSignalsSlots();
