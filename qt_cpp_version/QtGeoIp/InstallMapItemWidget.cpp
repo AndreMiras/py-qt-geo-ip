@@ -6,6 +6,7 @@
  */
 
 #include "InstallMapItemWidget.h"
+#include "MainWindow.h"
 #include <quazip/JlCompress.h>
 #include <QDesktopServices>
 #include <QNetworkRequest>
@@ -49,8 +50,7 @@ void InstallMapItemWidget::setupSignalsSlots()
 void InstallMapItemWidget::downloadButtonPressed()
 {
     QUrl url(mapItemModel->getDownloadLink());
-    QString downloadDir =
-            QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+    QString downloadDir = MainWindow::getRunningAppMapDataDir();
     QString filename = QFileInfo(url.path()).fileName();
     QString filenameFullPath = downloadDir + "/" + filename;
 
@@ -175,17 +175,17 @@ void InstallMapItemWidget::downloadFinished()
 void InstallMapItemWidget::unZipFile()
 {
     QUrl url(mapItemModel->getDownloadLink());
-    QString downloadDir =
-            QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+    QString downloadDir = MainWindow::getRunningAppMapDataDir();
     QString filename = QFileInfo(url.path()).fileName();
     QString filenameFullPath = downloadDir + "/" + filename;
+
+    // create the application data folder if it doesn't exist
+    if (!QDir(downloadDir).exists())
+    {
+        QDir().mkpath(downloadDir);
+    }
+
     unZipFile(filenameFullPath, downloadDir);
-    /*
-    QString outFileName(filenameFullPath);
-    // takes the zip out
-    outFileName.chop(QString(".zip").size());
-    unZipFile(filenameFullPath, outFileName);
-     */
 }
 
 /*
@@ -194,15 +194,7 @@ void InstallMapItemWidget::unZipFile()
 void InstallMapItemWidget::unZipFile(
         const QString& zipfilename, const QString& extDirPath)
 {
-    // QStringList list =
-    JlCompress::extractDir(
-                           zipfilename, extDirPath);
-    /*
-    for (int i=0,n=list.count();i<n;i++)
-    {
-        qDebug("%2i : %s",i,qPrintable(list.at(i)));
-    }
-     */
+    JlCompress::extractDir(zipfilename, extDirPath);
 }
 
 void InstallMapItemWidget::updateWidget()

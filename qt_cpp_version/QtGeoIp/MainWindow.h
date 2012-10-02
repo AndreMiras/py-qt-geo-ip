@@ -15,6 +15,8 @@
 #include <GeoIPCity.h>
 #include <QTimer>
 #include <QString>
+#include <QList>
+#include <QDir>
 
 using namespace Marble;
 using namespace std;
@@ -30,6 +32,18 @@ public:
     MainWindow();
     virtual ~MainWindow();
     static QString getSettingsFilename();
+    static QString getLocalMarbleMapDir();
+    static QString getSystemMarbleMapDir();
+    static QString getRunningAppMapDataDir();
+
+    /**
+     * Retrives map themes files by looking in three locations:
+     *  - running application dedicated map data directory
+     *  - local Marble map data directory
+     *  - system Marble map data directory
+     * @return List of map theme relative paths
+     */
+    static QList<QString> getAllThemes();
 private slots:
     /**
      * Geocodes IP:
@@ -43,6 +57,7 @@ private slots:
     void openMapInstaller();
     void openDownloadMap();
     void openDownloadGeoLite();
+
 private:
     Ui::MainWindow widget;
     CustomMarbleWidget* marbleWidget;
@@ -50,6 +65,9 @@ private:
     PreferencesForm* preferencesForm;
     MapInstallerForm* mapInstallerForm;
     static QString settingsFilename;
+    static QDir localMarbleMapDir;
+    static QDir systemMarbleMapDir;
+    static QDir runningAppMapDataDir;
 
     void setupSignalsSlots();
     /**
@@ -64,6 +82,13 @@ private:
     GeoIPRecord* get_ip_record(const string& ip);
 
     QString getMapTheme();
+
+    /**
+     * Searches for *.dgml files in all sub directories
+     * @param directory, directory to search from
+     * @return a list of found map theme relative paths
+     */
+    static QList<QString> getAllThemesIn(const QDir& directory);
 
     /**
      * Updates the IP information box labels.

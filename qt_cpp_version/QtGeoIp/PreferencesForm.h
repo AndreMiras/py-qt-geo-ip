@@ -27,6 +27,7 @@ private:
 
     void setupSignalsSlots();
     void customSetupUi();
+    void fillUpMapThemesComboBox();
 };
 
 #endif	/* _PREFERENCESFORM_H */

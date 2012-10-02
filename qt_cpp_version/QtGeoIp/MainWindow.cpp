@@ -6,19 +6,28 @@
  */
 
 #include "MainWindow.h"
+#include <iostream>
 #include "PreferencesForm.h"
 #include <QUrl>
 #include <QFile>
 #include <QSettings>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include <QDirIterator>
+#include <QStack>
 #include <marble/GeoPainter.h>
+#include <marble/MapThemeManager.h>
+#include <marble/MarbleDirs.h>
+#include <qt4/QtCore/qglobal.h>
 
 
 const string MainWindow::defaultGeoIpPath =
         "/usr/share/GeoIP/GeoLiteCity.dat";
 const string MainWindow::defaultMapTheme = "earth/plain/plain.dgml";
 QString MainWindow::settingsFilename;
+QDir MainWindow::localMarbleMapDir;
+QDir MainWindow::systemMarbleMapDir;
+QDir MainWindow::runningAppMapDataDir;
 
 MainWindow::MainWindow()
 {
@@ -56,7 +65,16 @@ void MainWindow::setupSignalsSlots()
 
 void MainWindow::customSetupUi()
 {
+    /* setup globals */
     settingsFilename = QCoreApplication::applicationName();
+    localMarbleMapDir = QDir::cleanPath(
+        MarbleDirs::localPath() + "/maps");
+    systemMarbleMapDir = QDir::cleanPath(
+        MarbleDirs::systemPath() + "/maps");
+    runningAppMapDataDir = QDir::cleanPath(
+        QDesktopServices::storageLocation(
+                QDesktopServices::DataLocation) + "/maps");
+
     updateZoomTimer = new QTimer(this);
     preferencesForm = NULL;
     mapInstallerForm = NULL;
@@ -68,7 +86,6 @@ void MainWindow::customSetupUi()
     marbleWidget->setAnimationsEnabled(true);
     marbleWidget->goHome();
     widget.middleVerticalLayout->addWidget(marbleWidget);
-
 }
 
 QString MainWindow::getSettingsFilename()
@@ -216,9 +233,26 @@ void MainWindow::updateZoom()
     }
 }
 
+/*
+ * TODO:find a way to load theme in both running app local marble path and
+ *      marble system path
+ */
 void MainWindow::updateMapTheme()
 {
     QString mapTheme = getMapTheme();
+    // MarbleDirs::setMarbleDataPath(runningAppMapDataDir);
+    // MarbleDirs::path(runningAppMapDataDir);
+
+    /*
+     * using "MarbleDirs::setMarbleDataPath(const QString&)" will overwrite
+     * "systemPath" while "MarbleDirs::path(const QString&)" doesn't seem
+     * to have any effect. Is this a Marble (KDE 4.8.5 SC) bug?
+     */
+    // MarbleDirs::setMarbleDataPath(runningAppMapDataDir.path());
+    // MarbleDirs::path(runningAppMapDataDir);
+    qDebug("localPath: %s", qPrintable(MarbleDirs::localPath()));
+    qDebug("systemPath: %s", qPrintable(MarbleDirs::systemPath()));
+    qDebug("marbleDataPath: %s", qPrintable(MarbleDirs::marbleDataPath()));
 
     if (marbleWidget->mapThemeId() != mapTheme)
     {
@@ -226,6 +260,70 @@ void MainWindow::updateMapTheme()
         // for some reasons showGrid state is lost after setting map theme
         marbleWidget->setShowGrid(false);
     }
+}
+
+QList<QString> MainWindow::getAllThemes()
+{
+    QStringList dgmlFiles;
+
+    dgmlFiles += getAllThemesIn(localMarbleMapDir);
+    dgmlFiles += getAllThemesIn(systemMarbleMapDir);
+    dgmlFiles += getAllThemesIn(runningAppMapDataDir);
+
+    return dgmlFiles;
+}
+
+QList<QString> MainWindow::getAllThemesIn(const QDir& directory)
+{
+    QStringList dgmlFiles;
+    QStack<QString> stack;
+
+    QDir directoryCleaned(QDir::cleanPath(directory.absolutePath()));
+    stack.push(directoryCleaned.absolutePath());
+    while (!stack.isEmpty())
+    {
+        QString sSubdir = stack.pop();
+        QDir subdir(sSubdir);
+
+        // Check for the files.
+        QStringList entries = subdir.entryList(QStringList() << "*.dgml", QDir::Files);
+        for (int i = 0; i < entries.size(); i++)
+        {
+            // tries to extract the Marble style relative theme path
+            int relativePathSize =
+                subdir.path().size() - directoryCleaned.path().size() - 1;
+            QString mapRelativeDir = sSubdir.right(relativePathSize);
+            QString mapRelativePathmapRelativeDir =
+                    mapRelativeDir + "/" + entries[i];
+            dgmlFiles += QDir::cleanPath(mapRelativePathmapRelativeDir);
+        }
+
+        QFileInfoList infoEntries = subdir.entryInfoList(
+                QStringList(),
+                QDir::AllDirs | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+        for (int i = 0; i < infoEntries.size(); i++)
+        {
+            QFileInfo& item = infoEntries[i];
+            stack.push(item.absoluteFilePath());
+        }
+    }
+
+    return dgmlFiles;
+}
+
+QString MainWindow::getLocalMarbleMapDir()
+{
+    return localMarbleMapDir.path();
+}
+
+QString MainWindow::getSystemMarbleMapDir()
+{
+    return systemMarbleMapDir.path();
+}
+
+QString MainWindow::getRunningAppMapDataDir()
+{
+    return runningAppMapDataDir.path();
 }
 
 void MainWindow::geoCodeIp()

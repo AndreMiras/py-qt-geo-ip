@@ -33,8 +33,9 @@ void PreferencesForm::setupSignalsSlots()
 
 void PreferencesForm::customSetupUi()
 {
-    QSettings settings(MainWindow::getSettingsFilename());
     int mapThemeComboBoxIndex;
+    QSettings settings(MainWindow::getSettingsFilename());
+    fillUpMapThemesComboBox();
 
     QString geoLiteCityPath = settings.value(
             "geoLiteCityPath",
@@ -50,6 +51,16 @@ void PreferencesForm::customSetupUi()
         mapThemeComboBoxIndex = 0;
     }
     widget.mapThemeComboBox->setCurrentIndex(mapThemeComboBoxIndex);
+}
+
+void PreferencesForm::fillUpMapThemesComboBox()
+{
+    QList<QString> themes = MainWindow::getAllThemes();
+    for (int i = 0; i < themes.size(); i++)
+    {
+        QString theme = themes.at(i);
+        widget.mapThemeComboBox->addItem(theme);
+    }
 }
 
 void PreferencesForm::browse()
