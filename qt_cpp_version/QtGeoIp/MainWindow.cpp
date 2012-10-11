@@ -25,9 +25,10 @@ const string MainWindow::defaultGeoIpPath =
         "/usr/share/GeoIP/GeoLiteCity.dat";
 const string MainWindow::defaultMapTheme = "earth/plain/plain.dgml";
 QString MainWindow::settingsFilename;
-QDir MainWindow::localMarbleMapDir;
-QDir MainWindow::systemMarbleMapDir;
-QDir MainWindow::runningAppMapDataDir;
+QDir MainWindow::localMarbleDir;
+QDir MainWindow::systemMarbleDir;
+// TODO: ~/.local/share/data/QtGeoIp != ~/.local/share/QtGeoIp/data
+QDir MainWindow::runningAppDataDir;
 
 MainWindow::MainWindow()
 {
@@ -67,13 +68,10 @@ void MainWindow::customSetupUi()
 {
     /* setup globals */
     settingsFilename = QCoreApplication::applicationName();
-    localMarbleMapDir = QDir::cleanPath(
-        MarbleDirs::localPath() + "/maps");
-    systemMarbleMapDir = QDir::cleanPath(
-        MarbleDirs::systemPath() + "/maps");
-    runningAppMapDataDir = QDir::cleanPath(
-        QDesktopServices::storageLocation(
-                QDesktopServices::DataLocation) + "/maps");
+    localMarbleDir = QDir::cleanPath(MarbleDirs::localPath());
+    systemMarbleDir = QDir::cleanPath(MarbleDirs::systemPath());
+    runningAppDataDir = QDir::cleanPath(
+        QDesktopServices::storageLocation(QDesktopServices::DataLocation));
 
     updateZoomTimer = new QTimer(this);
     preferencesForm = NULL;
@@ -233,10 +231,6 @@ void MainWindow::updateZoom()
     }
 }
 
-/*
- * TODO:find a way to load theme in both running app local marble path and
- *      marble system path
- */
 void MainWindow::updateMapTheme()
 {
     QString mapTheme = getMapTheme();
@@ -248,11 +242,15 @@ void MainWindow::updateMapTheme()
      * "systemPath" while "MarbleDirs::path(const QString&)" doesn't seem
      * to have any effect. Is this a Marble (KDE 4.8.5 SC) bug?
      */
-    // MarbleDirs::setMarbleDataPath(runningAppMapDataDir.path());
-    // MarbleDirs::path(runningAppMapDataDir);
-    qDebug("localPath: %s", qPrintable(MarbleDirs::localPath()));
+    // marble bug workaround
+    QString themeDirectory = getDirFromTheme(mapTheme);
+    MarbleDirs::setMarbleDataPath(themeDirectory); // marble bug workaround
+    qDebug("themeDirectory: %s", qPrintable(themeDirectory));
+    /*
+    qDebug("localPath: %s", qPrint12.04able(MarbleDirs::localPath()));
     qDebug("systemPath: %s", qPrintable(MarbleDirs::systemPath()));
     qDebug("marbleDataPath: %s", qPrintable(MarbleDirs::marbleDataPath()));
+     */
 
     if (marbleWidget->mapThemeId() != mapTheme)
     {
@@ -262,13 +260,32 @@ void MainWindow::updateMapTheme()
     }
 }
 
+
+// TODO: DRY
+QString MainWindow::getDirFromTheme(QString theme)
+{
+    if (getAllThemesIn(getLocalMarbleMapDir()).contains(theme))
+    {
+        return localMarbleDir.path();
+    }
+    if (getAllThemesIn(getSystemMarbleMapDir()).contains(theme))
+    {
+        return systemMarbleDir.path();
+    }
+    if (getAllThemesIn(getRunningAppMapDataDir()).contains(theme))
+    {
+        return runningAppDataDir.path();
+    }
+    return QString();
+}
+
 QList<QString> MainWindow::getAllThemes()
 {
     QStringList dgmlFiles;
 
-    dgmlFiles += getAllThemesIn(localMarbleMapDir);
-    dgmlFiles += getAllThemesIn(systemMarbleMapDir);
-    dgmlFiles += getAllThemesIn(runningAppMapDataDir);
+    dgmlFiles += getAllThemesIn(getLocalMarbleMapDir());
+    dgmlFiles += getAllThemesIn(getSystemMarbleMapDir());
+    dgmlFiles += getAllThemesIn(getRunningAppMapDataDir());
 
     return dgmlFiles;
 }
@@ -313,17 +330,17 @@ QList<QString> MainWindow::getAllThemesIn(const QDir& directory)
 
 QString MainWindow::getLocalMarbleMapDir()
 {
-    return localMarbleMapDir.path();
+    return QDir::cleanPath(localMarbleDir.path() + "/maps/");
 }
 
 QString MainWindow::getSystemMarbleMapDir()
 {
-    return systemMarbleMapDir.path();
+    return QDir::cleanPath(systemMarbleDir.path() + "/maps/");
 }
 
 QString MainWindow::getRunningAppMapDataDir()
 {
-    return runningAppMapDataDir.path();
+    return QDir::cleanPath(runningAppDataDir.path() + "/maps/");
 }
 
 void MainWindow::geoCodeIp()

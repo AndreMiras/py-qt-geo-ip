@@ -3,6 +3,8 @@
  * Author: andre
  *
  * Created on September 30, 2012, 1:45 PM
+ * TODO: verify the directory doesn't already exists before unziping
+ * prompt a warning message if it does
  */
 
 #include "InstallMapItemWidget.h"
@@ -15,6 +17,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QUrl>
+
 
 InstallMapItemWidget::InstallMapItemWidget(MapItemModel* mapItemModel)
 {
@@ -34,7 +37,10 @@ InstallMapItemWidget::~InstallMapItemWidget()
 
 void InstallMapItemWidget::customSetupUi()
 {
-
+    // MarbleWidget doesn't seem to look into runningAppMapData directory but
+    // cheating with MarbleDirs::setMarbleDataPath(getRunningAppMapDataDir())
+    // did the trick
+    downloadDir = MainWindow::getRunningAppMapDataDir();
 }
 
 void InstallMapItemWidget::setupSignalsSlots()
@@ -50,7 +56,6 @@ void InstallMapItemWidget::setupSignalsSlots()
 void InstallMapItemWidget::downloadButtonPressed()
 {
     QUrl url(mapItemModel->getDownloadLink());
-    QString downloadDir = MainWindow::getRunningAppMapDataDir();
     QString filename = QFileInfo(url.path()).fileName();
     QString filenameFullPath = downloadDir + "/" + filename;
 
@@ -175,7 +180,6 @@ void InstallMapItemWidget::downloadFinished()
 void InstallMapItemWidget::unZipFile()
 {
     QUrl url(mapItemModel->getDownloadLink());
-    QString downloadDir = MainWindow::getRunningAppMapDataDir();
     QString filename = QFileInfo(url.path()).fileName();
     QString filenameFullPath = downloadDir + "/" + filename;
 
@@ -194,6 +198,24 @@ void InstallMapItemWidget::unZipFile()
 void InstallMapItemWidget::unZipFile(
         const QString& zipfilename, const QString& extDirPath)
 {
+    // TODO: verify nothing will be overwrited, popup a message if this is
+    // the case
+    /*
+    if (QFile::exists(filenameFullPath))
+    {
+        if (QMessageBox::question(this, tr("Downloader"),
+                                  tr(
+                                     "There already exists a file called %1 in "
+                                     "Overwrite?"
+                                     ).arg(filenameFullPath),
+                                  QMessageBox::Yes | QMessageBox::No,
+                                  QMessageBox::No)
+                == QMessageBox::No)
+            return;
+        QFile::remove(filenameFullPath);
+    }
+     */
+
     JlCompress::extractDir(zipfilename, extDirPath);
 }
 

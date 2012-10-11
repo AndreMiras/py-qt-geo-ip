@@ -44,6 +44,7 @@ private slots:
 private:
     Ui::InstallMapItemWidget widget;
     MapItemModel* mapItemModel;
+    QString downloadDir;
     void setupSignalsSlots();
     void customSetupUi();
     void updateWidget();

@@ -37,13 +37,20 @@ public:
     static QString getRunningAppMapDataDir();
 
     /**
-     * Retrives map themes files by looking in three locations:
+     * Retrieves map themes files by looking in three locations:
      *  - running application dedicated map data directory
      *  - local Marble map data directory
      *  - system Marble map data directory
      * @return List of map theme relative paths
      */
     static QList<QString> getAllThemes();
+
+    /**
+     * Retrieves the directory where is stored the given theme
+     * @param theme
+     * @return a directory string
+     */
+    static QString getDirFromTheme(QString theme);
 private slots:
     /**
      * Geocodes IP:
@@ -65,9 +72,9 @@ private:
     PreferencesForm* preferencesForm;
     MapInstallerForm* mapInstallerForm;
     static QString settingsFilename;
-    static QDir localMarbleMapDir;
-    static QDir systemMarbleMapDir;
-    static QDir runningAppMapDataDir;
+    static QDir localMarbleDir;
+    static QDir systemMarbleDir;
+    static QDir runningAppDataDir;
 
     void setupSignalsSlots();
     /**
