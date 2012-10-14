@@ -24,12 +24,16 @@ public:
     void setMapItemModel(MapItemModel* mapItemModel);
 
 signals:
+       /*
        void installButtonClicked(const MapItemModel& mapItemModel);
        void useButtonClicked(const MapItemModel& mapItemModel);
+        */
 
 private slots:
+    /*
     void emitInstallButtonClicked();
     void emitUseButtonClicked();
+     */
 
     void downloadButtonPressed();
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);

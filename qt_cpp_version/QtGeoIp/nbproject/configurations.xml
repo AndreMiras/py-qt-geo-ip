@@ -52,7 +52,7 @@
         <compilerSet>default</compilerSet>
       </toolsSet>
       <qt>
-        <modules>core gui network</modules>
+        <modules>core gui network xml webkit</modules>
       </qt>
       <compileType>
         <linkerTool>
@@ -71,7 +71,7 @@
       </toolsSet>
       <qt>
         <buildMode>1</buildMode>
-        <modules>core gui</modules>
+        <modules>core gui network xml webkit</modules>
       </qt>
       <compileType>
         <cTool>

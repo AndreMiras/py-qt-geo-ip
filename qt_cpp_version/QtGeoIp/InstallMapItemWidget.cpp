@@ -45,10 +45,12 @@ void InstallMapItemWidget::customSetupUi()
 
 void InstallMapItemWidget::setupSignalsSlots()
 {
+    /*
     connect(widget.installPushButton, SIGNAL(clicked()),
             this, SLOT(emitInstallButtonClicked()));
     connect(widget.usePushButton, SIGNAL(clicked()),
             this, SLOT(emitUseButtonClicked()));
+     */
     connect(widget.usePushButton, SIGNAL(clicked()),
             this, SLOT(unZipFile()));
 }
@@ -239,6 +241,7 @@ void InstallMapItemWidget::setMapItemModel(MapItemModel* mapItemModel)
     updateWidget();
 }
 
+/*
 void InstallMapItemWidget::emitInstallButtonClicked()
 {
     emit installButtonClicked(*mapItemModel);
@@ -248,3 +251,4 @@ void InstallMapItemWidget::emitUseButtonClicked()
 {
     emit useButtonClicked(*mapItemModel);
 }
+ */
