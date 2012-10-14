@@ -27,8 +27,6 @@ InstallMapItemWidget::InstallMapItemWidget(MapItemModel* mapItemModel)
     setMapItemModel(mapItemModel);
 
     progressDialog = new QProgressDialog(this);
-    connect(widget.installPushButton, SIGNAL(clicked()),
-            this, SLOT(downloadButtonPressed()));
 }
 
 InstallMapItemWidget::~InstallMapItemWidget()
@@ -41,6 +39,8 @@ void InstallMapItemWidget::customSetupUi()
     // cheating with MarbleDirs::setMarbleDataPath(getRunningAppMapDataDir())
     // did the trick
     downloadDir = MainWindow::getRunningAppMapDataDir();
+    // doing it in the designer (4.8.2) breaks the layout
+    widget.mapDescriptionLabel->setWordWrap(true);
 }
 
 void InstallMapItemWidget::setupSignalsSlots()
@@ -51,8 +51,8 @@ void InstallMapItemWidget::setupSignalsSlots()
     connect(widget.usePushButton, SIGNAL(clicked()),
             this, SLOT(emitUseButtonClicked()));
      */
-    connect(widget.usePushButton, SIGNAL(clicked()),
-            this, SLOT(unZipFile()));
+    connect(widget.installPushButton, SIGNAL(clicked()),
+            this, SLOT(downloadButtonPressed()));
 }
 
 void InstallMapItemWidget::downloadButtonPressed()
@@ -195,7 +195,9 @@ void InstallMapItemWidget::unZipFile()
 }
 
 /*
- * TODO: add some progress bar
+ * TODO:
+ *      - add some progress bar
+ *      - add file exists warning
  */
 void InstallMapItemWidget::unZipFile(
         const QString& zipfilename, const QString& extDirPath)

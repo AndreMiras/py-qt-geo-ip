@@ -7,33 +7,26 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>161</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>InstallMapItemWidget</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="1" rowspan="2" colspan="2">
+   <item row="0" column="2">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1" rowspan="2">
+     <item row="4" column="2">
+      <widget class="QPushButton" name="installPushButton">
+       <property name="text">
+        <string>Donwload &amp;&amp; Install</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" rowspan="2" colspan="2">
       <widget class="QLabel" name="mapDescriptionLabel">
        <property name="text">
         <string>Map Description</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QPushButton" name="installPushButton">
-       <property name="text">
-        <string>Install</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="usePushButton">
-       <property name="text">
-        <string>Use</string>
        </property>
       </widget>
      </item>
@@ -46,9 +39,35 @@
         </font>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string>Map Title</string>
        </property>
       </widget>
+     </item>
+     <item row="4" column="1">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="0">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>

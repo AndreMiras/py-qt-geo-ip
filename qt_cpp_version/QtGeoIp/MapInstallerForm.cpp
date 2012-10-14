@@ -54,7 +54,7 @@ void MapInstallerForm::addInstallMapItem(
     QListWidgetItem *item = new QListWidgetItem();
     widget.mapsListWidget->addItem(item);
     widget.mapsListWidget->setItemWidget(item, installMapItemWidget);
-    item->setSizeHint(installMapItemWidget->sizeHint());
+    item->setSizeHint(widget.mapsListWidget->sizeHint());
 }
 
 void MapInstallerForm::getRemoteMapsMeta()
