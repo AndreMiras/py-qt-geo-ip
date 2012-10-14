@@ -35,6 +35,11 @@ void MapItemModel::setDownloadLink(const QString& downloadLink)
     this->downloadLink = downloadLink;
 }
 
+void MapItemModel::setImageLink(const QString& imageLink)
+{
+    this->imageLink = imageLink;
+}
+
 QString MapItemModel::getName() const
 {
     return name;
@@ -48,4 +53,9 @@ QString MapItemModel::getDescription() const
 QString MapItemModel::getDownloadLink() const
 {
     return downloadLink;
+}
+
+QString MapItemModel::getImageLink() const
+{
+    return imageLink;
 }

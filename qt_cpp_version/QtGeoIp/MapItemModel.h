@@ -17,13 +17,16 @@ public:
     void setName(const QString& name);
     void setDescription(const QString& description);
     void setDownloadLink(const QString& downloadLink);
+    void setImageLink(const QString& imageLink);
     QString getName() const;
     QString getDescription() const;
     QString getDownloadLink() const;
+    QString getImageLink() const;
 private:
     QString name;
     QString description;
     QString downloadLink;
+    QString imageLink;
 };
 
 #endif	/* MAPITEMMODEL_H */

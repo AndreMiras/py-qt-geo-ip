@@ -41,6 +41,7 @@ private slots:
      * Performs some clean-up
      */
     void downloadFinished();
+    void mapImageReplyFinished(QNetworkReply* pReply);
     void unZipFile();
     void downloadReadyRead();
     void cancelDownload();
@@ -49,6 +50,7 @@ private:
     Ui::InstallMapItemWidget widget;
     MapItemModel* mapItemModel;
     QString downloadDir;
+    QNetworkAccessManager* mapImageManager;
     void setupSignalsSlots();
     void customSetupUi();
     void updateWidget();

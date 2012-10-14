@@ -86,6 +86,7 @@ void MapInstallerForm::addMapItemModelFromDict(
     MapItemModel* mapItemModel = new MapItemModel(dict["name"]);
     mapItemModel->setDownloadLink(maps_url + dict["payload_url"]);
     mapItemModel->setDescription(dict["summary_text"]);
+    mapItemModel->setImageLink(maps_url + dict["map_image_url"]);
     addInstallMapItem(new InstallMapItemWidget(mapItemModel));
 }
 
@@ -99,6 +100,8 @@ QMap<QString, QString> MapInstallerForm::getMetaDictFromMetaContent(
         QDomElement docElem = doc.documentElement();
         dict["name"] =
                 docElem.elementsByTagName("name").at(0).toElement().text();
+        dict["map_image_url"] =
+                docElem.elementsByTagName("preview").at(0).toElement().text();
         dict["payload_url"] =
                 docElem.elementsByTagName("payload").at(0).toElement().text();
         /*

@@ -41,6 +41,7 @@ void InstallMapItemWidget::customSetupUi()
     downloadDir = MainWindow::getRunningAppMapDataDir();
     // doing it in the designer (4.8.2) breaks the layout
     widget.mapDescriptionLabel->setWordWrap(true);
+    mapImageManager = new QNetworkAccessManager(this);
 }
 
 void InstallMapItemWidget::setupSignalsSlots()
@@ -53,6 +54,8 @@ void InstallMapItemWidget::setupSignalsSlots()
      */
     connect(widget.installPushButton, SIGNAL(clicked()),
             this, SLOT(downloadButtonPressed()));
+    connect(mapImageManager, SIGNAL(finished(QNetworkReply*)),
+         this, SLOT(mapImageReplyFinished(QNetworkReply*)));
 }
 
 void InstallMapItemWidget::downloadButtonPressed()
@@ -176,6 +179,14 @@ void InstallMapItemWidget::downloadFinished()
     unZipFile();
 }
 
+void InstallMapItemWidget::mapImageReplyFinished(QNetworkReply* pReply)
+{
+    QImage image;
+    QByteArray data = pReply->readAll();
+    image.loadFromData(data);
+    widget.mapImageLabel->setPixmap(QPixmap::fromImage(image));
+}
+
 /**
  * TODO: handle if the file doesn't exist (e.g. couldn't be downloaded)
  */
@@ -229,6 +240,8 @@ void InstallMapItemWidget::updateWidget()
     {
         widget.mapTitleLabel->setText(mapItemModel->getName());
         widget.mapDescriptionLabel->setText(mapItemModel->getDescription());
+        mapImageManager->get(QNetworkRequest(
+                QUrl(mapItemModel->getImageLink())));
     }
 }
 
