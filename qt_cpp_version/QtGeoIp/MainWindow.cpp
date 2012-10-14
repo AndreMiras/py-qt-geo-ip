@@ -98,6 +98,8 @@ void MainWindow::openSettings()
         preferencesForm = new PreferencesForm();
         connect(preferencesForm, SIGNAL(accepted()),
                 this, SLOT(updateMapTheme()));
+        connect(preferencesForm, SIGNAL(moreMapsClicked()),
+                this, SLOT(openDownloadMap()));
     }
     preferencesForm->exec();
 }

@@ -15,12 +15,15 @@ class PreferencesForm : public QDialog {
 public:
     PreferencesForm();
     virtual ~PreferencesForm();
-
     QString getMapTheme();
+
+signals:
+       void moreMapsClicked();
 
 private slots:
     void browse();
     void saveSettings();
+    void emitMoreMapsButtonClicked();
 
 private:
     Ui::PreferencesForm widget;

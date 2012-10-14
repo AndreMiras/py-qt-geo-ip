@@ -28,6 +28,8 @@ void PreferencesForm::setupSignalsSlots()
             this, SLOT(saveSettings()));
     connect(widget.browsePushButton, SIGNAL(clicked()),
             this, SLOT(browse()));
+    connect(widget.moreMapsPushButton, SIGNAL(clicked()),
+            this, SLOT(emitMoreMapsButtonClicked()));
     
 }
 
@@ -61,6 +63,11 @@ void PreferencesForm::fillUpMapThemesComboBox()
         QString theme = themes.at(i);
         widget.mapThemeComboBox->addItem(theme);
     }
+}
+
+void PreferencesForm::emitMoreMapsButtonClicked()
+{
+    emit moreMapsClicked();
 }
 
 void PreferencesForm::browse()
