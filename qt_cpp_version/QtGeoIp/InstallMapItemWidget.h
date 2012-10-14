@@ -28,6 +28,10 @@ signals:
        void installButtonClicked(const MapItemModel& mapItemModel);
        void useButtonClicked(const MapItemModel& mapItemModel);
         */
+        /**
+         * Signal released when a new map was successfully installed.
+         */
+        void newMapInstalled();
 
 private slots:
     /*

@@ -54,6 +54,8 @@ void MapInstallerForm::addInstallMapItem(
     QListWidgetItem *item = new QListWidgetItem();
     widget.mapsListWidget->addItem(item);
     widget.mapsListWidget->setItemWidget(item, installMapItemWidget);
+    connect(installMapItemWidget, SIGNAL(newMapInstalled()),
+         this, SLOT(emitNewMapInstalled()));
     item->setSizeHint(widget.mapsListWidget->sizeHint());
 }
 
@@ -138,4 +140,9 @@ void MapInstallerForm::mapsIndexReplyFinished(QNetworkReply* pReply)
         }
     }
     processMapsMeta(metaUrls);
+}
+
+void MapInstallerForm::emitNewMapInstalled()
+{
+    emit newMapInstalled();
 }

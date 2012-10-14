@@ -232,6 +232,7 @@ void InstallMapItemWidget::unZipFile(
      */
 
     JlCompress::extractDir(zipfilename, extDirPath);
+    emit newMapInstalled();
 }
 
 void InstallMapItemWidget::updateWidget()

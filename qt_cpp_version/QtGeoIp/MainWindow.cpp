@@ -110,6 +110,15 @@ void MainWindow::openMapInstaller()
     {
         mapInstallerForm = new MapInstallerForm();
     }
+    /*
+     * if the preference form was already opened,
+     * updates its maps combobox after the new map was installed
+     */
+    if (preferencesForm != NULL)
+    {
+        connect(mapInstallerForm, SIGNAL(newMapInstalled()),
+                preferencesForm, SLOT(updateMapThemesComboBox()));
+    }
     mapInstallerForm->exec();
 }
 

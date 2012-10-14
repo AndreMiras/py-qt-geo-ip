@@ -25,6 +25,9 @@ public:
     virtual ~MapInstallerForm();
     void addInstallMapItem(InstallMapItemWidget* installMapItemWidget);
 
+signals:
+    void newMapInstalled();
+
 private slots:
     void mapsIndexReplyFinished(QNetworkReply*);
 
@@ -43,6 +46,7 @@ private slots:
      *  - "preview_url": the map preview image
      */
     void addMapItemModelFromDict(const QMap<QString, QString> dict);
+    void emitNewMapInstalled();
 
 private:
     static const QString maps_url;

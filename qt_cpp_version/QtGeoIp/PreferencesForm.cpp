@@ -55,9 +55,15 @@ void PreferencesForm::customSetupUi()
     widget.mapThemeComboBox->setCurrentIndex(mapThemeComboBoxIndex);
 }
 
+void PreferencesForm::updateMapThemesComboBox()
+{
+    fillUpMapThemesComboBox();
+}
+
 void PreferencesForm::fillUpMapThemesComboBox()
 {
     QList<QString> themes = MainWindow::getAllThemes();
+    widget.mapThemeComboBox->clear();
     for (int i = 0; i < themes.size(); i++)
     {
         QString theme = themes.at(i);

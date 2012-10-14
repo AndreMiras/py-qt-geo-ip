@@ -18,7 +18,10 @@ public:
     QString getMapTheme();
 
 signals:
-       void moreMapsClicked();
+    void moreMapsClicked();
+
+public slots:
+    void updateMapThemesComboBox();
 
 private slots:
     void browse();
